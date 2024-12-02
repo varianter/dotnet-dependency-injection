@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Database\Database.csproj" />
+    <ProjectReference Include="..\DependencyInjection\DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

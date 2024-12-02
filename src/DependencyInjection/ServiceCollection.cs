@@ -2,38 +2,52 @@ namespace DependencyInjection;
 
 public class ServiceCollection : IServiceCollection
 {
+    private readonly List<ServiceDescriptor> _descriptors = [];
+    
+    private IServiceCollection Add(Type serviceType, Type implementationType, ServiceLifetime lifetime)
+    {
+        _descriptors.Add(new ServiceDescriptor
+        {
+            Lifetime = lifetime,
+            ServiceType = serviceType,
+            ImplementationType = implementationType
+        });
+        
+        return this;
+    }
+    
     public IServiceCollection AddTransient(Type serviceType, Type implementationType)
     {
-        throw new NotImplementedException();
+        return Add(serviceType, implementationType, ServiceLifetime.Transient);
     }
 
     public IServiceCollection AddTransient<TService, TImplementation>() where TService : class where TImplementation : class, TService
     {
-        throw new NotImplementedException();
+        return AddTransient(typeof(TService), typeof(TImplementation));
     }
 
     public IServiceCollection AddScoped(Type serviceType, Type implementationType)
     {
-        throw new NotImplementedException();
+        return Add(serviceType, implementationType, ServiceLifetime.Scoped);
     }
 
     public IServiceCollection AddScoped<TService, TImplementation>() where TService : class where TImplementation : class, TService
     {
-        throw new NotImplementedException();
+        return AddScoped(typeof(TService), typeof(TImplementation));
     }
 
     public IServiceCollection AddSingleton(Type serviceType, Type implementationType)
     {
-        throw new NotImplementedException();
+        return Add(serviceType, implementationType, ServiceLifetime.Singleton);
     }
 
     public IServiceCollection AddSingleton<TService, TImplementation>() where TService : class where TImplementation : class, TService
     {
-        throw new NotImplementedException();
+        return AddSingleton(typeof(TService), typeof(TImplementation));
     }
 
     public IServiceProvider BuildServiceProvider()
     {
-        throw new NotImplementedException();
+        return new ServiceProvider(_descriptors);
     }
 }

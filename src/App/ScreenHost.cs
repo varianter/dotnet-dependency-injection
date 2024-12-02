@@ -1,9 +1,11 @@
 using App.Screens;
+using IServiceProvider = DependencyInjection.IServiceProvider;
 
 namespace App;
 
-public class ScreenHost(IScreen[] screens)
+public class ScreenHost(IServiceProvider serviceProvider)
 {
+    private readonly IScreen[] screens = serviceProvider.GetServices<IScreen>().ToArray();
     private int _activeScreenIndex;
     
     public void Run()
