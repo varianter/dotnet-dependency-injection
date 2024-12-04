@@ -11,14 +11,15 @@ public class ScreenHostBuilder
     {
         var builder = new ScreenHostBuilder();
         
-        // Hmm, this might become a bit unwieldy if we add more screens and their dependencies
-        // Is there some sort of pattern we could use to make this more manageable?:
-        builder._screens.Add(new AboutScreen());
-        builder._screens.Add(new TodoScreen(new TodoRepository()));
-        
         return builder;
     }
     
+    public ScreenHostBuilder AddScreen<TScreen>(TScreen screen) where TScreen : class, IScreen
+    {
+        _screens.Add(screen);
+        
+        return this;
+    }
     public ScreenHost Build()
     {
         return new ScreenHost(_screens.ToArray());

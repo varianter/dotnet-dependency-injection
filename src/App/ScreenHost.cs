@@ -14,6 +14,11 @@ public class ScreenHost(IScreen[] screens)
         while (true)
         {
             var key = Console.ReadKey(true);
+            
+            if (key.Key == ConsoleKey.X)
+            {
+                break;
+            }
 
             if (IsScreenSwitch(key.KeyChar, out var newIndex))
             {
@@ -29,6 +34,8 @@ public class ScreenHost(IScreen[] screens)
             RenderMenu();
             RenderActiveScreen();
         }
+        
+        Console.WriteLine("Goodbye!");
     }
     
     private IScreen GetActiveScreen()
@@ -60,6 +67,7 @@ public class ScreenHost(IScreen[] screens)
         {
             Console.WriteLine($"[{i}]: {screens[i].Name}");
         }
+        Console.WriteLine("[x]: Exit");
 
         Console.WriteLine("-----------");
         Console.WriteLine(string.Empty);

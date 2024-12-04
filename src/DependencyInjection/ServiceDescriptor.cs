@@ -2,9 +2,9 @@ namespace DependencyInjection;
 
 public class ServiceDescriptor
 {
-    public ServiceLifetime Lifetime { get; }
+    public required ServiceLifetime Lifetime { get; init; }
 
-    public Type ServiceType { get; }
+    public required Type ServiceType { get; init; }
 
-    private Type? ImplementationType;
+    public required Type ImplementationType { get; init; }
 }
