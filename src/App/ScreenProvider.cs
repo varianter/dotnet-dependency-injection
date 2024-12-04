@@ -9,8 +9,8 @@ public class ScreenProvider(IScreen[] screens)
         return screens;
     }
     
-    public IScreen GetScreenByName(string name)
+    public IScreen GetScreen(Type screenType)
     {
-        return screens.FirstOrDefault(screen => screen.Name == name);
+        return screens.FirstOrDefault(screen => screen.GetType() == screenType);
     }
 }
