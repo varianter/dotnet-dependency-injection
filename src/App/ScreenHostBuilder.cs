@@ -20,8 +20,9 @@ public class ScreenHostBuilder
         
         return this;
     }
+    
     public ScreenHost Build()
     {
-        return new ScreenHost(_screens.ToArray());
+        return new ScreenHost(new ScreenProvider(_screens.ToArray()));
     }
 }

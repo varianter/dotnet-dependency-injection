@@ -2,12 +2,17 @@ using App.Screens;
 
 namespace App;
 
-public class ScreenHost(IScreen[] screens)
+public class ScreenHost(ScreenProvider screenProvider)
 {
-    private int _activeScreenIndex;
+    // Building screen "routes"
+    private readonly string[] _screenNames = screenProvider.GetScreens().Select(screen => screen.Name).ToArray();
+
+    private IScreen _activeScreen;
     
     public void Run()
     {
+        _activeScreen = screenProvider.GetScreenByName(_screenNames[0]);
+        
         RenderMenu();
         RenderActiveScreen();
 
@@ -22,7 +27,7 @@ public class ScreenHost(IScreen[] screens)
 
             if (IsScreenSwitch(key.KeyChar, out var newIndex))
             {
-                _activeScreenIndex = newIndex;
+                _activeScreen = screenProvider.GetScreenByName(_screenNames[newIndex]);
             }
             else
             {
@@ -35,22 +40,17 @@ public class ScreenHost(IScreen[] screens)
             RenderActiveScreen();
         }
         
-        Console.WriteLine("Goodbye!");
+        Console.WriteLine("You pressed 'x' to exit, goodbye!");
     }
     
-    private IScreen GetActiveScreen()
-    {
-        return screens[_activeScreenIndex];
-    }
-
     private void SendKeyToActiveScreen(char key)
     {
-        GetActiveScreen().AcceptKey(key);
+        _activeScreen.AcceptKey(key);
     }
 
     private bool IsScreenSwitch(char key, out int index)
     {
-        if (int.TryParse(key.ToString(), out var number) && number < screens.Length)
+        if (int.TryParse(key.ToString(), out var number) && number < _screenNames.Length)
         {
             index = number;
             return true;
@@ -63,9 +63,9 @@ public class ScreenHost(IScreen[] screens)
     private void RenderMenu()
     {
         Console.WriteLine("----Menu---");
-        for (var i = 0; i < screens.Length; i++)
+        for (var i = 0; i < _screenNames.Length; i++)
         {
-            Console.WriteLine($"[{i}]: {screens[i].Name}");
+            Console.WriteLine($"[{i}]: {_screenNames[i]}");;
         }
         Console.WriteLine("[x]: Exit");
 
@@ -75,9 +75,8 @@ public class ScreenHost(IScreen[] screens)
 
     private void RenderActiveScreen()
     {
-        var activeScreen = GetActiveScreen();
-        Console.WriteLine($"---{activeScreen.Name}---");
-        activeScreen.Render();
+        Console.WriteLine($"---{_activeScreen.Name}---");
+        _activeScreen.Render();
         Console.WriteLine("-----------");
         Console.Write("Choose your action by pressing the corresponding key: ");
     }
