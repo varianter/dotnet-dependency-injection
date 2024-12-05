@@ -1,23 +1,21 @@
 ﻿namespace Database;
 
-public class TodoRepository : ITodoRepository
+public class TodoRepository(IDb db) : ITodoRepository
 {
-    private readonly List<Todo> _todos = [];
-
     public Todo? GetById(int id)
     {
-        return _todos.FirstOrDefault(todo => todo.Id == id);
+        return db.DbTodos.FirstOrDefault(todo => todo.Id == id);
     }
 
     public Todo[] GetAll()
     {
-        return _todos.ToArray();
+        return db.DbTodos.ToArray();
     }
     
     public Todo Add(string title)
     {
-        var todo = new Todo { Id = _todos.Count + 1, Title = title, IsComplete = false };
-        _todos.Add(todo);
+        var todo = new Todo { Id = db.DbTodos.Count + 1, Title = title, IsComplete = false };
+        db.DbTodos.Add(todo);
         return todo;
     }
 

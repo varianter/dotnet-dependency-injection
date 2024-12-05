@@ -1,31 +1,23 @@
+using DependencyInjection.Tests.Shared;
+
 namespace DependencyInjection.Tests;
 
 public class ServiceScopeTests
 {
-    private interface IServiceA
-    {
-        public string Id { get; }
-    }
-
-    private class ServiceA : IServiceA
-    {
-        public string Id { get; } = Guid.NewGuid().ToString();
-    }
-
     [Fact]
     public void AddScoped_ResolvedInSameScope_ShouldBeSame()
     {
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddScoped<IServiceA, ServiceA>();
+        serviceCollection.AddScoped<IService, ServiceA>();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        IServiceA service1;
-        IServiceA service2;
+        IService service1;
+        IService service2;
         using (var scope = serviceProvider.CreateScope())
         {
-            service1 = scope.ServiceProvider.GetService<IServiceA>();
-            service2 = scope.ServiceProvider.GetService<IServiceA>();
+            service1 = scope.ServiceProvider.GetService<IService>();
+            service2 = scope.ServiceProvider.GetService<IService>();
             Assert.NotNull(service1);
             Assert.NotNull(service2);
 
@@ -34,7 +26,7 @@ public class ServiceScopeTests
 
         using (var scope = serviceProvider.CreateScope())
         {
-            var service3 = scope.ServiceProvider.GetService<IServiceA>();
+            var service3 = scope.ServiceProvider.GetService<IService>();
             Assert.NotNull(service3);
 
             Assert.NotSame(service1, service3);
@@ -46,12 +38,12 @@ public class ServiceScopeTests
     public void AddTransient_Resolved_ShouldAlwaysBeDifferent()
     {
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddTransient<IServiceA, ServiceA>();
+        serviceCollection.AddTransient<IService, ServiceA>();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var service1 = serviceProvider.GetService<IServiceA>();
-        var service2 = serviceProvider.GetService<IServiceA>();
+        var service1 = serviceProvider.GetService<IService>();
+        var service2 = serviceProvider.GetService<IService>();
 
         Assert.NotNull(service1);
         Assert.NotNull(service2);
@@ -63,21 +55,21 @@ public class ServiceScopeTests
     public void AddSingleton_Resolved_ShouldBeSameAcrossScopes()
     {
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddSingleton<IServiceA, ServiceA>();
+        serviceCollection.AddSingleton<IService, ServiceA>();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        IServiceA service1;
+        IService service1;
         using (var scope = serviceProvider.CreateScope())
         {
-            service1 = scope.ServiceProvider.GetService<IServiceA>();
+            service1 = scope.ServiceProvider.GetService<IService>();
             Assert.NotNull(service1);
         }
 
-        IServiceA service2;
+        IService service2;
         using (var scope = serviceProvider.CreateScope())
         {
-            service2 = scope.ServiceProvider.GetService<IServiceA>();
+            service2 = scope.ServiceProvider.GetService<IService>();
             Assert.NotNull(service2);
         }
 
