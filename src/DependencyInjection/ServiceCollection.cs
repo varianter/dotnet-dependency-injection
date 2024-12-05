@@ -7,12 +7,19 @@ public class ServiceCollection : IServiceCollection
     
     private IServiceCollection Add(Type serviceType, Type implementationType, ServiceLifetime lifetime)
     {
-        throw new NotImplementedException();
+        _descriptors.Add(new ServiceDescriptor
+        {
+            Lifetime = lifetime,
+            ServiceType = serviceType,
+            ImplementationType = implementationType
+        });
+        
+        return this;
     }
 
     public IServiceProvider BuildServiceProvider()
     {
-        throw new NotImplementedException();
+        return new ServiceProvider(_descriptors);
     }
 
     public IServiceCollection AddTransient(Type serviceType, Type implementationType)

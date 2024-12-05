@@ -1,16 +1,17 @@
 using App.Screens;
+using IServiceProvider = DependencyInjection.IServiceProvider;
 
 namespace App;
 
-public class ScreenProvider(IScreen[] screens)
+public class ScreenProvider(IServiceProvider serviceProvider)
 {
     public IScreen[] GetScreens()
     {
-        return screens;
+        return serviceProvider.GetServices<IScreen>().ToArray();
     }
     
     public IScreen GetScreen(Type screenType)
     {
-        return screens.FirstOrDefault(screen => screen.GetType() == screenType);
+        return (IScreen) serviceProvider.GetService(screenType);
     }
 }

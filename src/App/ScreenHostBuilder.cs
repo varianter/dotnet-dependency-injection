@@ -1,11 +1,12 @@
 using App.Screens;
 using Database;
+using DependencyInjection;
 
 namespace App;
 
 public class ScreenHostBuilder
 {
-    private readonly List<IScreen> _screens = [];
+    public IServiceCollection Services { get; } = new ServiceCollection();
     
     public static ScreenHostBuilder CreateDefaultBuilder()
     {
@@ -16,19 +17,23 @@ public class ScreenHostBuilder
     
     public ScreenHostBuilder AddScreens()
     {
-        // Hmm, this might become a bit unwieldy if we add more screens and their dependencies
-        // Is there some sort of pattern we could use to make this more manageable?:
-        var database = new Db();
-        var todoRepository = new TodoRepository(database);
+        var screenTypes = typeof(IScreen).Assembly.GetTypes()
+            .Where(t => typeof(IScreen).IsAssignableFrom(t) && !t.IsInterface)
+            .ToList();
         
-        _screens.Add(new AboutScreen());
-        _screens.Add(new TodoScreen(todoRepository));
+        foreach (var screenType in screenTypes)
+        {
+            Services.AddTransient(screenType);
+            Services.AddTransient(typeof(IScreen), screenType);
+        }
         
         return this;
     }
     
     public ScreenHost Build()
     {
-        return new ScreenHost(new ScreenProvider(_screens.ToArray()));
+        var serviceProvider = Services.BuildServiceProvider();
+        var screenProvider = new ScreenProvider(serviceProvider);
+        return new ScreenHost(screenProvider);
     }
 }

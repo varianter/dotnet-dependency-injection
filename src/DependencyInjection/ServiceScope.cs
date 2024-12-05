@@ -1,11 +1,10 @@
 namespace DependencyInjection;
 
-public class ServiceScope : IServiceScope
+public class ServiceScope(IEnumerable<ServiceDescriptor> descriptors) : IServiceScope
 {
-    public void Dispose()
-    {
-        // TODO release managed resources here
-    }
+    private readonly ServiceProvider _serviceProvider = new(descriptors);
 
-    public IServiceProvider ServiceProvider { get; }
+    public IServiceProvider ServiceProvider => _serviceProvider;
+
+    public void Dispose() => _serviceProvider.Dispose();
 }
