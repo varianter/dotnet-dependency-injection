@@ -19,6 +19,8 @@ We'll be building the DI-container in a test-driven manner, and the tests are al
 
 In the fifth topic we'll refactor the `App`-project to use our DI-container, which will not use the unit tests, but rather manual testing of the app.
 
+If you get stuck at any point you can review the [`solution`](https://github.com/varianter/dotnet-dependency-injection/compare/solution)-branch to get some hints. But I recommend you try to solve it yourself first!
+
 ## Registering services (Beginner)
 
 In this section we'll implement the `Add`-method in the [`ServiceCollection`](./src/DependencyInjection/ServiceCollection.cs)-class. This method should be able to register services with the DI-container.
@@ -128,4 +130,4 @@ This is a more advanced topic, and you can skip it if you want.
 
 ## Conclusion
 
-Congratulations! You have now built a simple Dependency Injection container from scratch. I'm not saying this is the correct or performant way to go about, but I'm hoping you've learnt that DI is not magic. It's just code.
+Congratulations! You have now built a simple Dependency Injection container from scratch. If you get stuck at any point you can review the [`solution`](https://github.com/varianter/dotnet-dependency-injection/compare/solution)-branch to get some hints. I'm not saying this is the correct or performant way to go about, but I'm hoping you've learnt that DI is not magic. It's just code.
