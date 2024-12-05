@@ -2,7 +2,7 @@ using DependencyInjection.Tests.Shared;
 
 namespace DependencyInjection.Tests;
 
-public class ServiceScopeTests
+public class LifetimeTests
 {
     [Fact]
     public void AddScoped_ResolvedInSameScope_ShouldBeSame()

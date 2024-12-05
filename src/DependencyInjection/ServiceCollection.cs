@@ -3,6 +3,7 @@ namespace DependencyInjection;
 public class ServiceCollection : IServiceCollection
 {
     private readonly List<ServiceDescriptor> _descriptors = [];
+    public IEnumerable<ServiceDescriptor> Descriptors => _descriptors;
     
     private IServiceCollection Add(Type serviceType, Type implementationType, ServiceLifetime lifetime)
     {
